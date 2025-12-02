@@ -1,0 +1,30 @@
+build_vector_db.py로 products_all_ver1_vlm.json의 내용을 적절히 요약해서 chromadb로 만듬
+그리고 추출한 무드키워드의 경우 마치 정답데이터처럼 사용할 수 있어서
+사용자가 입력한 텍스트나 이미지를 mood_keywords_clean.json에 있는 것과 맵핑시킴
+extract_categories.py로 만듬
+
+코사인 유사도를 쓰기 위해 category_resolver.py를 사용
+products_all_ver1.json 에서 실제 category_id 목록을 추출
+- OpenAI text-embedding-3-large로
+  카테고리 문장과 유저 입력을 임베딩
+- 코사인 유사도 가장 높은 카테고리를 반환
+
+config.py로 다양한 파일이나 모델 등을 표기
+
+input_vlm.py VLM을 처리함
+흐린 이미지나 사람이나 고양이 풍경사진 등 방 사진이나 무드를 추출하기 애매한 사진은 여기서 걸러짐
+
+llm_core
+input_vlm.py가 vlm을 처리한다면 llm_core.py는 주로 LLM이 어떻게 움직여야 하는지 처리함
+
+mood_vocab.py 정제된 사전 키워드로 스냅.
+
+product_filter.py RAG로 가져온 상품 후보 리스트에 대해
+- 카테고리/예산/무드/중복 추천 여부를 반영해서
+- 점수를 매기고 정렬하는 모듈.
+
+rag_index.py products_all_ver1_vlm.json → Chroma VectorDB 인덱싱 (build_vector_db.py처럼 한번만 실행해도 됨)
+
+rag_retriever.py ChromaDB 기반 RAG 검색기
+
+main.py CLI로 실행하면서도 핵심 로직들이 잔뜩 들어있음 (1000줄 넘음)
