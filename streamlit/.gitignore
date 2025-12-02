@@ -1,5 +1,0 @@
-__pycache__/
-*.pyc
-vector_db/
-model/
-.env
